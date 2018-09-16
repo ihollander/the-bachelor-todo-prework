@@ -1,16 +1,12 @@
 require 'pry'
 
 def get_first_name_of_season_winner(data, season)
-  data.each {|season_name,contestants|
-    if season_name == season
-      winner = contestants.select {|contestant,properties|
-        contestant["status"] == "Winner"
-      }.first
-      if winner != nil
-        return winner["name"].split(" ").first
-      end
-    end
-  }
+  winner = data[season].select {|contestant,properties|
+    contestant["status"] == "Winner"
+  }.first
+  if winner != nil
+    return winner["name"].split(" ").first
+  end
 end
 
 def get_contestant_name(data, occupation)
@@ -48,13 +44,9 @@ end
 
 def get_average_age_for_season(data, season)
   ages = []
-  data.each {|season_name,contestants|
-    if season_name == season
-      contestants.each {|contestant,properties|
-        ages << contestant["age"].to_i
-      }
-      age_sum = ages.inject{|sum, n| sum + n}
-      return (age_sum.to_f / ages.size.to_f).round
-    end
+  data[season].each {|contestant,properties|
+      ages << contestant["age"].to_i
   }
+  age_sum = ages.inject{|sum, n| sum + n}
+  return (age_sum.to_f / ages.size.to_f).round
 end
